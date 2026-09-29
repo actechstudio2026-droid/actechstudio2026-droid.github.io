@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A.C. Phone // Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="crt flicker">
+  <div class="scan-sweep"></div>
+
+  <div id="boot" aria-hidden="true">
+    <div class="lines">
+      <p id="boot-line-1"></p>
+      <p id="boot-line-2"></p>
+      <p id="boot-line-3" class="boot-final"></p>
+    </div>
+  </div>
+
+  <div class="page" id="page">
+    <div class="topbar">
+      <span>AC-PHONE // TERMINAL v1.0</span>
+      <span class="live"><span class="dot"></span> online</span>
+    </div>
+
+    <div class="term-window">
+      <div class="logo-box">
+        <img src="logo.png" alt="A.C. Phone">
+      </div>
+      <h1>A.C. PHONE</h1>
+      <p class="tagline">reparación de celulares: módulos · baterías · pines de carga<span class="cursor"></span></p>
+    </div>
+
+    <p class="menu-label">seleccioná un canal de contacto:</p>
+    <div class="menu">
+      <a class="menu-item" style="--i:0" href="https://wa.me/5491135172027" target="_blank" rel="noopener">
+        <span class="bracket">[01]</span>
+        <span class="label"><strong>WHATSAPP</strong><small>presupuesto y turnos</small></span>
+        <span class="go">ENTER ›</span>
+      </a>
+      <a class="menu-item" style="--i:1" href="https://instagram.com/a.c.phone.arg" target="_blank" rel="noopener">
+        <span class="bracket">[02]</span>
+        <span class="label"><strong>INSTAGRAM</strong><small>@a.c.phone.arg</small></span>
+        <span class="go">ENTER ›</span>
+      </a>
+      <a class="menu-item" style="--i:2" href="https://tiktok.com/@a.c.phone_" target="_blank" rel="noopener">
+        <span class="bracket">[03]</span>
+        <span class="label"><strong>TIKTOK</strong><small>@a.c.phone_</small></span>
+        <span class="go">ENTER ›</span>
+      </a>
+    </div>
+
+    <footer>A.C. PHONE (C) <span id="year"></span> — SYSTEM READY_</footer>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
