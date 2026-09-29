@@ -1,40 +1,78 @@
-  const reveals = document.querySelectorAll('.reveal');
-  if('IntersectionObserver' in window){
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        }
-      });
-    },{threshold:0.15});
-    reveals.forEach(el=>io.observe(el));
-  } else {
-    reveals.forEach(el=>el.classList.add('is-visible'));
+document.addEventListener('DOMContentLoaded', function () {
+  var boot = document.getElementById('boot');
+  var page = document.getElementById('page');
+  var footer = document.querySelector('footer');
+  var menuItems = document.querySelectorAll('.menu-item');
+  var yearSpan = document.getElementById('year');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
   }
 
-  // Nav: sombra sutil al hacer scroll
-  const nav = document.querySelector('.nav');
-  if(nav){
-    const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 8);
-    onScroll();
-    window.addEventListener('scroll', onScroll, {passive:true});
+  function revealPage() {
+    if (boot) boot.classList.add('hide');
+    if (page) page.classList.add('show');
+    menuItems.forEach(function (item, i) {
+      setTimeout(function () {
+        item.classList.add('in');
+      }, i * 120);
+    });
+    setTimeout(function () {
+      if (footer) footer.classList.add('in');
+    }, menuItems.length * 120 + 200);
   }
 
-  // Nav: menú móvil
-  const navToggle = document.getElementById('nav-toggle');
-  const mobileMenu = document.getElementById('mobile-menu');
-  if(navToggle && mobileMenu){
-    const closeMenu = () => {
-      navToggle.setAttribute('aria-expanded','false');
-      mobileMenu.classList.remove('is-open');
-    };
-    const toggleMenu = () => {
-      const isOpen = mobileMenu.classList.toggle('is-open');
-      navToggle.setAttribute('aria-expanded', String(isOpen));
-    };
-    navToggle.addEventListener('click', toggleMenu);
-    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
-    window.addEventListener('resize', () => { if(window.innerWidth > 820) closeMenu(); });
+  // If the visitor prefers reduced motion, skip the boot animation entirely
+  if (reduceMotion) {
+    if (boot) boot.style.display = 'none';
+    revealPage();
+    return;
   }
+
+  // Boot sequence: type out each terminal line, then reveal the page
+  var bootLines = [
+    { el: document.getElementById('boot-line-1'), text: '> iniciando sistema...' },
+    { el: document.getElementById('boot-line-2'), text: '> cargando A.C. PHONE...' },
+    { el: document.getElementById('boot-line-3'), text: '> listo_' }
+  ];
+
+  var TYPE_SPEED = 28; // ms per character
+  var LINE_PAUSE = 220; // pause between lines
+
+  function typeLine(index) {
+    if (index >= bootLines.length) {
+      setTimeout(revealPage, 300);
+      return;
+    }
+    var line = bootLines[index];
+    if (!line.el) { typeLine(index + 1); return; }
+
+    var chars = line.text.split('');
+    var pos = 0;
+
+    // remove the blinking cursor from the previous finished line
+    bootLines.forEach(function (l, i) {
+      if (i < index && l.el) l.el.classList.add('no-cursor');
+    });
+
+    var timer = setInterval(function () {
+      line.el.textContent = chars.slice(0, pos + 1).join('');
+      pos++;
+      if (pos >= chars.length) {
+        clearInterval(timer);
+        setTimeout(function () { typeLine(index + 1); }, LINE_PAUSE);
+      }
+    }, TYPE_SPEED);
+  }
+
+  typeLine(0);
+
+  // small tactile feedback when a menu link is tapped
+  menuItems.forEach(function (item) {
+    item.addEventListener('click', function () {
+      item.classList.add('tapped');
+      setTimeout(function () { item.classList.remove('tapped'); }, 250);
+    });
+  });
+});
